@@ -36,4 +36,12 @@ public class HhzController {
         Mono.just(a);
         return Mono.just(a);
     }
+
+    @ApiOperation(value = "测试2", notes = "city2")
+    @GetMapping(value = "test2")
+    public Mono<List> listAll2() throws InterruptedException {
+        List a = new ArrayList();
+        a.add("asd");
+        return Mono.just(a);
+    }
 }
