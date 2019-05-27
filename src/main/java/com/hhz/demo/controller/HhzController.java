@@ -1,47 +1,36 @@
 package com.hhz.demo.controller;
 
+import com.hhz.demo.dao.TAccountMapper;
+import com.hhz.demo.dao.TMessageMapper;
+import com.hhz.demo.dao.UserMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Mono;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Api(value = "demo", description = "demo详情")
 @RestController
 public class HhzController {
 
-    @ApiOperation(value = "测试", notes = "city1")
-    @GetMapping(value = "test")
-    public Mono<List> listAll() throws InterruptedException {
-        List a = new ArrayList();
-        a.add("1234");
-        a.add("a123");
-        a.add("777");
-        //Thread.sleep(3000);
-        Mono.just(a);
-        return Mono.just(a);
-    }
 
-    @ApiOperation(value = "测试1", notes = "city1")
-    @GetMapping(value = "test1")
-    public Mono<List> listAll1() throws InterruptedException {
-        List a = new ArrayList();
-        a.add("1234");
-        a.add("666");
-        //Thread.sleep(3000);
-        Mono.just(a);
-        return Mono.just(a);
-    }
+    @Autowired
+    private TAccountMapper tAccountMapper;
+
+
+    @Autowired
+    private TMessageMapper tMessageMapper;
+
+    @Autowired
+    private UserMapper userMapper;
+
+
 
     @ApiOperation(value = "测试333", notes = "city333")
     @GetMapping(value = "test2")
-    public Mono<List> listAll2() throws InterruptedException {
-        List a = new ArrayList();
-        a.add("asd");
-        return Mono.just(a);
+    public String listAll2() throws InterruptedException {
+        return null;
     }
+
 }
