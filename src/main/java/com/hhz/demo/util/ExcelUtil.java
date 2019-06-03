@@ -17,6 +17,8 @@ import java.util.*;
 public class ExcelUtil {
 
     public static void main(String[] args) throws IOException {
+        ArrayList aa = new ArrayList();
+        int d = aa.size();
         FileInputStream fis = new FileInputStream("/Users/hhz/test/测试.xlsx");
         //指定每列对应的类属性
         LinkedHashMap<String, String> alias = new LinkedHashMap<>();
@@ -97,7 +99,9 @@ public class ExcelUtil {
             Set<Map.Entry<String, Integer>> entrySet = propertyMap.entrySet();
             for (Map.Entry<String, Integer> entry : entrySet) {
                 //获取此行指定列的值,即为属性对应的值
-                String property = row.getCell(entry.getValue()).getStringCellValue();
+                Cell cell = row.getCell(entry.getValue());
+                cell.setCellType(Cell.CELL_TYPE_STRING);
+                String property = cell.getStringCellValue();
                 BeanUtils.setProperty(instance, entry.getKey(), property);
             }
             pojoList.add(instance);
