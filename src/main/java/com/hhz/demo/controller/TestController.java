@@ -1,49 +1,59 @@
 package com.hhz.demo.controller;
 
-import com.hhz.demo.encrypt.CodeUtil;
-import com.hhz.demo.encrypt.MedusaEncryptException;
-import com.hhz.demo.encrypt.MedusaEncryptor;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import com.hhz.demo.model.UserTest;
+import com.hhz.demo.service.Aservice;
+import com.hhz.demo.service.Bservice;
+import com.hhz.demo.service.Cservice;
+import com.hhz.demo.service.DepService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
 
-
+@Api(value = "test", description = "test详情")
 @RestController
 public class TestController {
 
 
-    @RequestMapping(value = "/saas/backUrl", method = RequestMethod.POST)
-    public BackEncrypt aaa(@RequestBody BackEncrypt backEncrypt) {
+    private static ThreadLocal<UserTest> LOCAL_USER = new ThreadLocal<>();
+    @Autowired
+    private Aservice aservice;
+    @Autowired
+    private Bservice bservice;
+    @Autowired
+    private Cservice cservice;
+    @Autowired
+    private DepService depService;
 
-        String token = "123";
-        String aesKey = "111108bb8e6dbce3c9671d6fdb69d15066227608111";
-        String suiteKey = "abc123";
-        MedusaEncryptor medusaEncryptor = null;
-        try {
-            medusaEncryptor = new MedusaEncryptor(token, aesKey, suiteKey);
-            String data = medusaEncryptor.getDecryptMsg(backEncrypt.getMsgSignature(), backEncrypt.getTimeStamp(), backEncrypt.getNonce(), backEncrypt.getEncrypt());
-            System.out.println(data);
-        } catch (MedusaEncryptException e) {
-            e.printStackTrace();
+    @ApiOperation(value = "测试ThreadLocal", notes = "测试ThreadLocal")
+    @GetMapping(value = "test1")
+    public UserTest listAll2() {
+        UserTest userTest = LOCAL_USER.get();
+        if (userTest == null) {
+            userTest = new UserTest();
+            userTest.setAge("aaaa");
+            userTest.setId("asd");
+            LOCAL_USER.set(userTest);
         }
+        return userTest;
+    }
 
+    @ApiOperation(value = "测试spring bean 循环依赖", notes = "测试spring bean 循环依赖")
+    @GetMapping(value = "test2")
+    public String aaa() {
 
-        Map<String, String> encryptedMap = null;
-        try {
-            String renturnMes = "success";
-            encryptedMap = medusaEncryptor.getEncryptedMap(renturnMes, System.currentTimeMillis(), CodeUtil.getCode(10));
-        } catch (MedusaEncryptException e) {
-            e.printStackTrace();
-        }
+        aservice.aaa();
+        bservice.bbb();
+        cservice.ccc();
+        return "asd";
+    }
 
-        BackEncrypt returnEncrpy = new BackEncrypt();
-        returnEncrpy.setEncrypt(encryptedMap.get("encrypt"));
-        returnEncrpy.setMsgSignature(encryptedMap.get("msg_signature"));
-        returnEncrpy.setTimeStamp(encryptedMap.get("timeStamp"));
-        returnEncrpy.setNonce(encryptedMap.get("nonce"));
-        return returnEncrpy;
+    @ApiOperation(value = "测试mysql锁", notes = "测试mysql锁")
+    @GetMapping(value = "test3")
+    public String test3(String orgId) {
+        depService.aaa(orgId);
+        return "test3";
     }
 }

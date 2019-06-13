@@ -7,10 +7,14 @@ import org.springframework.stereotype.Service;
 public class Bservice {
 
     @Autowired
-    private Cservice cservice;
+    private Aservice aservice;
 
     public void bbb() {
-        cservice.ccc();
+        System.out.println("aaaa");
+    }
+
+    public void ccc() {
+        aservice.aaa();
         System.out.println("aaaa");
     }
 }
