@@ -37,6 +37,9 @@
     <script th:src="@{/Bootstrap/datetimepicker/bootstrap-datetimepicker.min.js}"></script>
     <script th:src="@{/Bootstrap/datetimepicker/bootstrap-datetimepicker.zh-CN.js}"></script>
 
+    <script th:src="@{/Bootstrap/bootstrap/js/layer/layer.js}"></script>
+
+
     <!--[if lt IE 9]>
     <script src="/Scripts/html5shiv.js"></script>
     <script src="/Scripts/respond.min.js"></script>
@@ -109,11 +112,13 @@
                        </span>
                                     <span>
                                      <a class='data-detail btn btn-info' data-title='新增定时器'
-                                        href="javascript:addTabs({title: '新增',close: true,url: '/timer/addTimer'});">新增</a>
+                                        href="javascript:addTabs({id:'1',text: '新增',close: true,url: '/timer/addTimer'});">新增</a>
                             </span>
                                     <span>
                                      <a class='data-detail btn btn-info' data-title='topic列表'
-                                        _href='/topic/list'>topic列表</a>
+                                        href="javascript:addTabs({id:'2',text: 'topic列表',close: true,url: '/topic/list'});"
+                                     >topic列表</a>
+
                             </span>
                                 </div>
                             </div>
@@ -282,27 +287,26 @@
                     }
                 },
                 {
-                    field: '_id',
+                    field: 'id',
                     title: '操作',
                     align: "center",
                     formatter: function (value, row, index) {
-
-                        var used = "<button class='btn btn-sm btn-primary'onclick='startTimer(" + "\"" + value + "\"" + ")'>启用</button> &nbsp";
-                        var disabled = "<button class='btn btn-sm btn-primary'onclick='stopTimer(" + "\"" + value + "\"" + ")'>禁用</button> &nbsp"
+                        var used = "<button class='btn btn-sm btn-primary' onclick='startTimer(" + "\"" + value + "\"" + ")'>启用</button> &nbsp";
+                        var disabled = "<button class='btn btn-sm btn-primary' onclick='stopTimer(" + "\"" + value + "\"" + ")'>禁用</button> &nbsp"
                         if (row.status) {
-                            return "<a class='data-detail btn btn-primary btn-mini'  data-title='定时器详情'  _href='${timerDomain}/timer/" + value + "/detailTimer'>详情</a> &nbsp" +
-                                "<a class='data-detail btn btn-primary btn-mini'  data-title='定时器编辑'   _href='${timerDomain}/timer/" + value + "/editTimer'>编辑</a> &nbsp" +
+                            return "<a class='data-detail btn btn-primary btn-mini'  data-title='定时器详情'  href='/timer/" + value + "/detailTimer'>详情</a> &nbsp" +
+                                "<a class='data-detail btn btn-primary btn-mini'  data-title='定时器编辑'   href='/timer/" + value + "/editTimer'>编辑</a> &nbsp" +
                                 disabled +
-                                "<button class='btn btn-sm btn-primary'onclick='executeTimer(" + "\"" + value + "\"" + ")'>执行</button> &nbsp" +
-                                "<button class='btn btn-sm btn-primary'onclick='delTimer(" + "\"" + value + "\"" + ")'>删除</button>"
+                                "<button class='btn btn-sm btn-primary' onclick='executeTimer(" + "\"" + value + "\"" + ")'>执行</button> &nbsp" +
+                                "<button class='btn btn-sm btn-primary' onclick='delTimer(" + "\"" + value + "\"" + ")'>删除</button>"
                                 ;
                         }
                         else {
-                            return "<a class='data-detail btn btn-primary btn-mini'  data-title='定时器详情'   _href='${timerDomain}/timer/" + value + "/detailTimer'>详情</a> &nbsp" +
-                                "<a class='data-detail btn btn-primary btn-mini'  data-title='定时器编辑'    _href='${timerDomain}/timer/" + value + "/editTimer'>编辑</a> &nbsp" +
+                            return "<a class='data-detail btn btn-primary btn-mini'  data-title='定时器详情'   href='/timer/" + value + "/detailTimer'>详情</a> &nbsp" +
+                                "<a class='data-detail btn btn-primary btn-mini'  data-title='定时器编辑'    href='/timer/" + value + "/editTimer'>编辑</a> &nbsp" +
                                 used +
-                                "<button class='btn btn-sm btn-primary'onclick='executeTimer(" + "\"" + value + "\"" + ")'>执行</button> &nbsp" +
-                                "<button class='btn btn-sm btn-primary'onclick='delTimer(" + "\"" + value + "\"" + ")'>删除</button>"
+                                "<button class='btn btn-sm btn-primary' onclick='executeTimer(" + "\"" + value + "\"" + ")'>执行</button> &nbsp" +
+                                "<button class='btn btn-sm btn-primary' onclick='delTimer(" + "\"" + value + "\"" + ")'>删除</button>"
                                 ;
                         }
                     }
@@ -343,7 +347,7 @@
     function startTimer(id) {
         $.ajax({
             type: 'post',
-            url: '${timerDomain}/timer/' + id + '/startTimer',
+            url: '/timer/' + id + '/startTimer',
             dataType: "text",
             success: function (res) {
                 if (res == "ok") {
@@ -365,7 +369,7 @@
     function stopTimer(id) {
         $.ajax({
             type: 'post',
-            url: '${timerDomain}/timer/' + id + '/stopTimer',
+            url: '/timer/' + id + '/stopTimer',
             dataType: "text",
             success: function (res) {
                 if (res == "ok") {
@@ -385,7 +389,7 @@
     function executeTimer(id) {
         $.ajax({
             type: 'get',
-            url: '${timerDomain}/timer/' + id + '/executeTimer',
+            url: '/timer/' + id + '/executeTimer',
             dataType: "text",
             success: function (res) {
                 if (res == "ok") {
@@ -410,9 +414,10 @@
 
 
     function delTimer(id) {
+        alert(id)
         $.ajax({
             type: 'get',
-            url: '${timerDomain}/timer/' + id + '/delTimer',
+            url: '/timer/' + id + '/delTimer',
             dataType: "text",
             success: function (res) {
                 if (res == "ok") {
@@ -442,7 +447,7 @@
             , yes: function (index) {
                 $.ajax({
                     type: 'get',
-                    url: '${timerDomain}/timer/' + id + '/delTimer',
+                    url: '/timer/' + id + '/delTimer',
                     dataType: "text",
                     success: function (res) {
                         if (res == "ok") {

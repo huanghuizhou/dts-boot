@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -31,6 +32,8 @@ import static org.quartz.TriggerBuilder.newTrigger;
  * @Version V1.0.
  * @date 2018.04.26 09:28:54
  */
+
+@Component
 public class TimerInit implements InitializingBean {
 
     private static final String TIMER = "Timer";

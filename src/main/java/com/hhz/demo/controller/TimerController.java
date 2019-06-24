@@ -5,7 +5,6 @@ import com.hhz.demo.model.TimerQuery;
 import com.hhz.demo.model.job.KafkaJob;
 import com.hhz.demo.model.timer.Executor;
 import com.hhz.demo.model.timer.TimerEntity;
-import com.hhz.demo.model.timer.TimerTopic;
 import com.hhz.demo.model.timer.TopicInfo;
 import com.hhz.demo.service.MongoDBService;
 import org.I0Itec.zkclient.ZkClient;
@@ -52,7 +51,6 @@ import static org.quartz.TriggerBuilder.newTrigger;
 public class TimerController {
 
     private static final String TIMER = "Timer";
-    private static final String TIMER_TOPIC = "TimerTopic";
     private static final Logger logger = LoggerFactory.getLogger(TimerController.class);
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @Resource
@@ -62,7 +60,7 @@ public class TimerController {
     @Autowired
     private ZkClient zkClient;
 
-    @Autowired
+    @Resource
     private KafkaTemplate<String, String> kafkaTemplate;
 
     @Autowired
@@ -80,8 +78,7 @@ public class TimerController {
      * @date 2018.04.19 09:38:06
      */
     @RequestMapping(value = "list", method = RequestMethod.GET)
-    public String toList(Model model) {
-        model.addAttribute("hhz", "asdasdasdasd");
+    public String toList() {
         return "timer/timerList";
     }
 
@@ -128,7 +125,7 @@ public class TimerController {
 
     //quartz启动执行器
     private void doStartTimer(TimerEntity timerEntity) throws SchedulerException {
-        Map<String, Object> map = new HashMap();
+        Map<String, Object> map = new HashMap<>();
         map.put("kafkaTemplate", kafkaTemplate);
         SimpleDateFormat sdf = new SimpleDateFormat(timerEntity.getMessage());
         map.put("sdf", sdf);
@@ -253,7 +250,6 @@ public class TimerController {
         Query query = new Query(Criteria.where("_id").is(id));
         TimerEntity timerEntity = mongoTemplate.findOne(query, TimerEntity.class, TIMER);
         model.addAttribute("timer", timerEntity);
-        model.addAttribute("topics", getAllTopics());
         return "/timer/timerEdit";
     }
 
@@ -310,14 +306,12 @@ public class TimerController {
      * 功能:跳转到新增定时器页面
      * </p>
      *
-     * @param model :
      * @return string
      * @author huanghuizhou
      * @date 2018.04.19 09:38:07
      */
     @RequestMapping(value = "/addTimer")
-    public String addTimer(Model model) {
-        model.addAttribute("topics", getAllTopics());
+    public String addTimer() {
         return "timer/timerAdd";
     }
 
@@ -468,14 +462,6 @@ public class TimerController {
     }
 
 
-    //获取所有TimerTopic
-    private List<TimerTopic> getAllTopics() {
-        Query query = new Query();
-        //根据topic降序排序
-        query.with(new Sort(Sort.Direction.ASC, "topic"));
-        List<TimerTopic> timerTopics = mongoTemplate.find(query, TimerTopic.class, TIMER_TOPIC);
-        return timerTopics;
-    }
 
 
     //根据corn获取理论上次执行时间

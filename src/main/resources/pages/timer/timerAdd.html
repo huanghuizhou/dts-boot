@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Medusa</title>
+    <!--Bootstrap-->
+    <link th:href="@{/Bootstrap/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
+    <!-- Font Awesome -->
+    <link th:href="@{/Bootstrap/font-awesome/css/font-awesome.min.css}" rel="stylesheet"/>
+    <!--[if IE 7]>
+    <link href="/Content/font-awesome/css/font-awesome-ie7.min.css" rel="stylesheet"/>
+    <![endif]-->
+    <link th:href="@{/Bootstrap/sidebar-menu/sidebar-menu.css}" rel="stylesheet"/>
+    <link th:href="@{/Bootstrap/ace/css/ace-rtl.min.css}" rel="stylesheet"/>
+    <link th:href="@{/Bootstrap/ace/css/ace-skins.min.css}" rel="stylesheet"/>
+    <link th:href="@{/Bootstrap/toastr/toastr.min.css}" rel="stylesheet"/>
+
+    <script th:src="@{/Bootstrap/jquery.2.1.1.min.js}"></script>
+    <script th:src="@{/Bootstrap/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/Bootstrap/sidebar-menu/sidebar-menu.js}"></script>
+    <script th:src="@{/Bootstrap/bootstrap/js/bootstrap-tab.js}"></script>
+
+    <!--table相关-->
+    <link th:href="@{/Bootstrap/table/bootstrap-table.min.css}" rel="stylesheet"/>
+
+    <script th:src="@{/Bootstrap/table/bootstrap-table.min.js}"></script>
+    <script th:src="@{/Bootstrap/table/bootstrap-table-zh-CN.min.js}"></script>
+    <!--<script th:src="@{/Bootstrap/table/bootstrap-table-locale-all.min.js}"></script>-->
+
+    <!--日期控件-->
+    <link th:href="@{/Bootstrap/datetimepicker/bootstrap-datetimepicker.min.css}" rel="stylesheet"/>
+
+    <!--<script th:src="@{/Bootstrap/datetimepicker/moment.js}"></script>-->
+    <script th:src="@{/Bootstrap/datetimepicker/bootstrap-datetimepicker.min.js}"></script>
+    <script th:src="@{/Bootstrap/datetimepicker/bootstrap-datetimepicker.zh-CN.js}"></script>
+
+    <script th:src="@{/Bootstrap/bootstrap/js/jquery.validate.js}"></script>
+    <script th:src="@{/Bootstrap/bootstrap/js/jquery.validate.unobtrusive.js}"></script>
+    <script th:src="@{/Bootstrap/bootstrap/js/layer/layer.js}"></script>
+
+    <!--[if lt IE 9]>
+    <script src="/Scripts/html5shiv.js"></script>
+    <script src="/Scripts/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+        body {
+            font-size: 12px;
+        }
+
+        .nav > li > a {
+            padding: 5px 10px;
+        }
+
+        .tab-content {
+            padding-top: 3px;
+        }
+    </style>
+</head>
+<body>
+<div class="main-container" style="padding-top: 0">
+    <div class="main-content" style="margin-left: 0">
+        <div class="page-content">
+            <div class="container">
+                <form action="" method="post" id="timerForm" style="height: 100%">
+
+                    <div class="form-group col-md-12 col-xs-12">
+                        <label class="control-label col-md-2 col-xs-2" for="name">定时器名称:</label>
+                        <div class="col-md-4 col-xs-4">
+                            <input class="form-control" id="name" name="name" type="text" value=""
+                                   data-val="true" data-val-required="请输入定时器名称." placeholder="">
+                        </div>
+                        <div class="text-danger clearboth" data-valmsg-for="name"
+                             data-valmsg-replace="true"></div>
+                    </div>
+
+
+                    <div class="form-group col-md-12 col-xs-12">
+                        <label class="control-label col-md-2 col-xs-2" for="describe">描述:</label>
+                        <div class="col-md-4 col-xs-4">
+                            <input class="form-control" id="describe" name="describe" type="text" value=""
+                                   data-val="true" data-val-required="请输入定时器描述." placeholder="">
+                        </div>
+                        <div class="text-danger clearboth" data-valmsg-for="describe"
+                             data-valmsg-replace="true"></div>
+                    </div>
+
+
+                    <div class="form-group col-md-12 col-xs-12">
+                        <label class="control-label col-md-2 col-xs-2">topic:</label>
+                        <div class="col-md-4 col-xs-4">
+                            <input class="form-control" id="topic" name="topic" type="text" value=""
+                                   data-val="true" data-val-required="请输入调度器topic." placeholder="">
+                        </div>
+
+                        <div class="col-md-1 col-xs-1">
+                            <a class='data-detail btn btn-info' data-title='topic列表'
+                               _href='${timerDomain}/topic/list'>编辑</a>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 col-xs-12">
+                        <label class="control-label col-md-2 col-xs-2" for="message">message:</label>
+                        <div class="col-md-4 col-xs-4">
+
+                            <select class="form-control valid" aria-invalid="false" name="message" id="message"
+                                    data-val="true" data-val-required="请选择message.">
+                                <option value="">请选择</option>
+                                <option value="yyyy-MM-dd HH:mm:ss">yyyy-MM-dd HH:mm:ss</option>
+                                <option value="yyyy-MM-dd">yyyy-MM-dd</option>
+                            </select>
+                        </div>
+                        <div class="text-danger clearboth" data-valmsg-for="message"
+                             data-valmsg-replace="true"></div>
+                    </div>
+
+                    <div class="form-group col-md-12 col-xs-12">
+                        <label class="control-label col-md-2 col-xs-2" for="message">corn:</label>
+                        <div class="col-md-4 col-xs-4">
+                            <input class="form-control" id="corn" name="corn" type="text" value=""
+                                   data-val="true" data-val-required="请输入corn."
+                                   placeholder="填正确的cron表达式 例如*/5 * * * * ?">
+                        </div>
+                        <div class="text-danger clearboth" data-valmsg-for="corn"
+                             data-valmsg-replace="true"></div>
+                    </div>
+
+
+                    <div class="form-group col-md-12 col-xs-12">
+                        <label class="control-label col-md-2 col-xs-2">定时器状态:</label>
+                        <div class="col-md-2 col-xs-2">
+                            <select class="form-control valid" aria-invalid="false" name="status" id="status">
+                                <option value="false">禁用</option>
+                                <option value="true">启用</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12 col-xs-12 mt-30 mb-20">
+                        <label class="control-label col-md-2 col-xs-2">&nbsp;</label>
+                        <div class="col-md-4 col-xs-4 text-right">
+                            <button type="button" id="submit" class="btn btn-primary pl-50 pr-50">保存</button>
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+            <!--页面内容end-->
+        </div>
+    </div>
+</div>
+
+
+<!--
+<div class="main-container" style="padding-top: 0">
+    <div class="main-content" style="margin-left: 0">
+        <div id="breadcrumbs" class="breadcrumbs">
+            <ol class="breadcrumb">
+            </ol>
+        </div>
+&lt;!&ndash;页面内容start&ndash;&gt;
+<div class="page-content">
+    <div class="content pt-20">
+        <form action="" method="post" id="timerForm">
+
+            <div class="form-group col-md-12 col-xs-12">
+                <label class="control-label col-md-2 col-xs-2" for="name">定时器名称:</label>
+                <div class="col-md-4 col-xs-4">
+                    <input class="form-control" id="name" name="name" type="text" value=""
+                           data-val="true" data-val-required="请输入定时器名称." placeholder="">
+                </div>
+                <div class="text-danger clearboth" data-valmsg-for="name"
+                     data-valmsg-replace="true"></div>
+            </div>
+
+
+            <div class="form-group col-md-12 col-xs-12">
+                <label class="control-label col-md-2 col-xs-2" for="describe">描述:</label>
+                <div class="col-md-4 col-xs-4">
+                    <input class="form-control" id="describe" name="describe" type="text" value=""
+                           data-val="true" data-val-required="请输入定时器描述." placeholder="">
+                </div>
+                <div class="text-danger clearboth" data-valmsg-for="describe"
+                     data-valmsg-replace="true"></div>
+            </div>
+
+
+            <div class="form-group col-md-12 col-xs-12">
+                <label class="control-label col-md-2 col-xs-2" >topic:</label>
+                <div class="col-md-4 col-xs-4">
+                    <select class="form-control valid" aria-invalid="false" name="topic" id="topic" th:each="timerTopic:${topics}">
+                            <option th:value="${timerTopic.topic}">${timerTopic.topic}</option>
+                    </select>
+                </div>
+
+                <div class="col-md-1 col-xs-1">
+                    <a class='data-detail btn btn-info' data-title='topic列表'
+                       _href='${timerDomain}/topic/list'>编辑</a>
+                </div>
+            </div>
+            <div class="form-group col-md-12 col-xs-12">
+                <label class="control-label col-md-2 col-xs-2" for="message">message:</label>
+                <div class="col-md-4 col-xs-4">
+
+                    <select class="form-control valid" aria-invalid="false" name="message" id="message"
+                            data-val="true" data-val-required="请选择message.">
+                        <option value="">请选择</option>
+                        <option value="yyyy-MM-dd HH:mm:ss">yyyy-MM-dd HH:mm:ss</option>
+                        <option value="yyyy-MM-dd">yyyy-MM-dd</option>
+                    </select>
+                </div>
+                <div class="text-danger clearboth" data-valmsg-for="message"
+                     data-valmsg-replace="true"></div>
+            </div>
+
+            <div class="form-group col-md-12 col-xs-12">
+                <label class="control-label col-md-2 col-xs-2" for="message">corn:</label>
+                <div class="col-md-4 col-xs-4">
+                    <input class="form-control" id="corn" name="corn" type="text" value=""
+                           data-val="true" data-val-required="请输入corn." placeholder="填正确的cron表达式 例如*/5 * * * * ?">
+                </div>
+                <div class="text-danger clearboth" data-valmsg-for="corn"
+                     data-valmsg-replace="true"></div>
+            </div>
+
+
+            <div class="form-group col-md-12 col-xs-12">
+                <label class="control-label col-md-2 col-xs-2" >定时器状态:</label>
+                <div class="col-md-2 col-xs-2">
+                    <select class="form-control valid" aria-invalid="false" name="status" id="status">
+                        <option value="false">禁用</option>
+                        <option value="true">启用</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group col-md-12 col-xs-12 mt-30 mb-20">
+                <label class="control-label col-md-2 col-xs-2" >&nbsp;</label>
+                <div class="col-md-4 col-xs-4 text-right">
+                    <button type="button" id="submit" class="btn btn-primary pl-50 pr-50">保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    </div>
+</div>
+-->
+
+<br/><br/><br/><br/><br/><br/><br/>
+
+<script type="text/javascript">
+
+    $(function () {
+        $('#submit').on('click', function () {
+            var $btn = $(this);
+            $("#timerForm").removeData("validator").removeData("unobtrusiveValidation");
+            // $.validator.unobtrusive.parse($("#timerForm"));
+            if ($("#timerForm").valid()) {
+                $btn.button('loading');
+                $.ajax({
+                    url: "/timer/doAddTimer",
+                    method: "post",
+                    contentType: "application/x-www-form-urlencoded",
+                    data: $("#timerForm").serialize(),
+                    dataType: "text",
+                    error: function () {//请求失败处理函数
+                        layer.msg('保存异常');
+                    },
+                    success: function (data) { //请求成功后处理函数。
+                        if (data == 'ok') {
+                            layer.msg("保存成功");
+                        } else if (data == 'mesError') {
+                            layer.msg("message格式错误,保存失败");
+                        } else if (data == 'cronError') {
+                            layer.msg("cron格式错误,保存失败");
+                        }
+                        $('#submit').button('reset');
+                    }
+                });
+            }
+        });
+    })
+
+
+</script>
+</body>
+
+
+</html>
