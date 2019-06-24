@@ -8,11 +8,13 @@
         <outputRelativeToContentRoot value="true" />
         <module name="bootWeb" />
         <module name="demo" />
+        <module name="dts-boot" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="bootWeb" target="1.8" />
       <module name="demo" target="1.8" />
+      <module name="dts-boot" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

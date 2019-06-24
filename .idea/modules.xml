@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/bootWeb.iml" filepath="$PROJECT_DIR$/bootWeb.iml" />
       <module fileurl="file://$PROJECT_DIR$/demo.iml" filepath="$PROJECT_DIR$/demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dts-boot.iml" filepath="$PROJECT_DIR$/dts-boot.iml" />
     </modules>
   </component>
 </project>
