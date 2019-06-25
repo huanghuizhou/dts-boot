@@ -37,11 +37,12 @@
     <script th:src="@{/Bootstrap/datetimepicker/bootstrap-datetimepicker.zh-CN.js}"></script>
 
 
-    <script th:src="@{/Bootstrap/bootstrap/js/layer/layer.js}"></script>
-
     <!--前段校验框架-->
     <script th:src="@{/Bootstrap/bootstrap/js/jqueryval.js}"></script>
     <script th:src="@{/Bootstrap/bootstrap/js/jquery.validate.unobtrusive.custom.js}"></script>
+
+    <script th:src="@{/Bootstrap/bootstrap/js/layer/layer.js}"></script>
+
 
     <!--[if lt IE 9]>
     <script src="/Scripts/html5shiv.js"></script>
@@ -66,12 +67,13 @@
     <div class="main-content" style="margin-left: 0">
         <div class="page-content">
             <div class="container">
-                <form action="" method="post" id="timerForm" style="height: 100%">
+                <form th:modelAttribute="${timer}" action="" method="post" id="timerForm" class="form-horizontal">
+
 
                     <div class="form-group col-md-12 col-xs-12">
-                        <label class="control-label col-md-2 col-xs-2" for="name">定时器名称:</label>
+                        <label class="control-label col-md-2 col-xs-2" for="name">任务名称:</label>
                         <div class="col-md-4 col-xs-4">
-                            <input class="form-control" id="name" name="name" type="text" value=""
+                            <input class="form-control" id="name" name="name" type="text" th:value="${timer.name}"
                                    data-val="true" data-val-required="请输入定时器名称." placeholder="">
                         </div>
                         <div class="text-danger clearboth" data-valmsg-for="name"
@@ -82,7 +84,8 @@
                     <div class="form-group col-md-12 col-xs-12">
                         <label class="control-label col-md-2 col-xs-2" for="describe">描述:</label>
                         <div class="col-md-4 col-xs-4">
-                            <input class="form-control" id="describe" name="describe" type="text" value=""
+                            <input class="form-control" id="describe" name="describe" type="text"
+                                   th:value="${timer.describe}"
                                    data-val="true" data-val-required="请输入定时器描述." placeholder="">
                         </div>
                         <div class="text-danger clearboth" data-valmsg-for="describe"
@@ -91,21 +94,29 @@
 
 
                     <div class="form-group col-md-12 col-xs-12">
-                        <label class="control-label col-md-2 col-xs-2">topic:</label>
+                        <label class="control-label col-md-2 col-xs-2" for=>topic:</label>
                         <div class="col-md-4 col-xs-4">
-                            <input class="form-control" id="topic" name="topic" type="text" value=""
-                                   data-val="true" data-val-required="请输入调度器topic." placeholder="">
+                            <input class="form-control" id="topic" name="topic" type="text" th:value="${timer.topic}"
+                                   data-val="true" data-val-required="请输入定时器描述." placeholder="" readonly>
                         </div>
                     </div>
+
+
                     <div class="form-group col-md-12 col-xs-12">
                         <label class="control-label col-md-2 col-xs-2" for="message">message:</label>
                         <div class="col-md-4 col-xs-4">
-
                             <select class="form-control valid" aria-invalid="false" name="message" id="message"
                                     data-val="true" data-val-required="请选择message.">
                                 <option value="">请选择</option>
-                                <option value="yyyy-MM-dd HH:mm:ss">yyyy-MM-dd HH:mm:ss</option>
-                                <option value="yyyy-MM-dd">yyyy-MM-dd</option>
+                                <option value="yyyy-MM-dd HH:mm:ss"
+                                        th:selected="${timer.message=='yyyy-MM-dd HH:mm:ss'}"
+                                >yyyy-MM-dd
+                                    HH:mm:ss
+                                </option>
+                                <option value="yyyy-MM-dd"
+                                        th:selected="${timer.message=='yyyy-MM-dd'}"
+                                >yyyy-MM-dd
+                                </option>
                             </select>
                         </div>
                         <div class="text-danger clearboth" data-valmsg-for="message"
@@ -115,7 +126,7 @@
                     <div class="form-group col-md-12 col-xs-12">
                         <label class="control-label col-md-2 col-xs-2" for="message">corn:</label>
                         <div class="col-md-4 col-xs-4">
-                            <input class="form-control" id="corn" name="corn" type="text" value=""
+                            <input class="form-control" id="corn" name="corn" type="text" th:value="${timer.corn}"
                                    data-val="true" data-val-required="请输入corn."
                                    placeholder="填正确的cron表达式 例如*/5 * * * * ?">
                         </div>
@@ -128,8 +139,8 @@
                         <label class="control-label col-md-2 col-xs-2">定时器状态:</label>
                         <div class="col-md-2 col-xs-2">
                             <select class="form-control valid" aria-invalid="false" name="status" id="status">
-                                <option value="false">禁用</option>
-                                <option value="true">启用</option>
+                                <option value="false" th:selected="!${timer.status}">禁用</option>
+                                <option value="true" th:selected="${timer.status}">启用</option>
                             </select>
                         </div>
                     </div>
@@ -140,6 +151,7 @@
                             <button type="button" id="submit" class="btn btn-primary pl-50 pr-50">保存</button>
                         </div>
                     </div>
+
                 </form>
 
 
@@ -155,28 +167,33 @@
 <script type="text/javascript">
 
     $(function () {
+
+
         $('#submit').on('click', function () {
+            var timerId = "[[${timer._id}]]";
+            alert(timerId)
+
             var $btn = $(this);
             $("#timerForm").removeData("validator").removeData("unobtrusiveValidation");
             $.validator.unobtrusive.parse($("#timerForm"));
             if ($("#timerForm").valid()) {
                 $btn.button('loading');
                 $.ajax({
-                    url: "/timer/doAddTimer",
+                    url: "/timer/" + "[[${timer._id}]]" + "/doEditTimer",
                     method: "post",
                     contentType: "application/x-www-form-urlencoded",
                     data: $("#timerForm").serialize(),
                     dataType: "text",
                     error: function () {//请求失败处理函数
-                        layer.msg('保存异常');
+                        layer.msg('编辑异常');
                     },
                     success: function (data) { //请求成功后处理函数。
                         if (data == 'ok') {
-                            layer.msg("保存成功");
+                            layer.msg("编辑成功");
                         } else if (data == 'mesError') {
-                            layer.msg("message格式错误,保存失败");
+                            layer.msg("message格式错误,编辑失败");
                         } else if (data == 'cronError') {
-                            layer.msg("cron格式错误,保存失败");
+                            layer.msg("cron格式错误,编辑失败");
                         }
                         $('#submit').button('reset');
                     }

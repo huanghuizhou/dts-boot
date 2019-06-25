@@ -250,7 +250,7 @@ public class TimerController {
         Query query = new Query(Criteria.where("_id").is(id));
         TimerEntity timerEntity = mongoTemplate.findOne(query, TimerEntity.class, TIMER);
         model.addAttribute("timer", timerEntity);
-        return "/timer/timerEdit";
+        return "timer/timerEdit";
     }
 
     /**
@@ -458,7 +458,7 @@ public class TimerController {
         List<TopicInfo> topicInfos = topicToConsumerMap(timerEntity.getTopic());
         executor.setTopicInfos(topicInfos);
         model.addAttribute("executor", executor);
-        return "/timer/timerDetail";
+        return "timer/timerDetail";
     }
 
 

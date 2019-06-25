@@ -36,12 +36,10 @@
     <script th:src="@{/Bootstrap/datetimepicker/bootstrap-datetimepicker.min.js}"></script>
     <script th:src="@{/Bootstrap/datetimepicker/bootstrap-datetimepicker.zh-CN.js}"></script>
 
-
+    <script th:src="@{/Bootstrap/bootstrap/js/jquery.validate.js}"></script>
+    <script th:src="@{/Bootstrap/bootstrap/js/jquery.validate.unobtrusive.js}"></script>
     <script th:src="@{/Bootstrap/bootstrap/js/layer/layer.js}"></script>
 
-    <!--前段校验框架-->
-    <script th:src="@{/Bootstrap/bootstrap/js/jqueryval.js}"></script>
-    <script th:src="@{/Bootstrap/bootstrap/js/jquery.validate.unobtrusive.custom.js}"></script>
 
     <!--[if lt IE 9]>
     <script src="/Scripts/html5shiv.js"></script>
@@ -66,12 +64,14 @@
     <div class="main-content" style="margin-left: 0">
         <div class="page-content">
             <div class="container">
-                <form action="" method="post" id="timerForm" style="height: 100%">
+                <form th:modelAttribute="${timer}" action="" class="form-horizontal">
+
 
                     <div class="form-group col-md-12 col-xs-12">
-                        <label class="control-label col-md-2 col-xs-2" for="name">定时器名称:</label>
+                        <label class="control-label col-md-2 col-xs-2" for="name">任务名称:</label>
                         <div class="col-md-4 col-xs-4">
-                            <input class="form-control" id="name" name="name" type="text" value=""
+                            <input class="form-control" id="name" name="name" type="text" th:value="${timer.name}"
+                                   readonly
                                    data-val="true" data-val-required="请输入定时器名称." placeholder="">
                         </div>
                         <div class="text-danger clearboth" data-valmsg-for="name"
@@ -82,7 +82,8 @@
                     <div class="form-group col-md-12 col-xs-12">
                         <label class="control-label col-md-2 col-xs-2" for="describe">描述:</label>
                         <div class="col-md-4 col-xs-4">
-                            <input class="form-control" id="describe" name="describe" type="text" value=""
+                            <input class="form-control" id="describe" name="describe" type="text"
+                                   th:value="${timer.describe}" readonly
                                    data-val="true" data-val-required="请输入定时器描述." placeholder="">
                         </div>
                         <div class="text-danger clearboth" data-valmsg-for="describe"
@@ -91,22 +92,21 @@
 
 
                     <div class="form-group col-md-12 col-xs-12">
-                        <label class="control-label col-md-2 col-xs-2">topic:</label>
+                        <label class="control-label col-md-2 col-xs-2" for=>topic:</label>
                         <div class="col-md-4 col-xs-4">
-                            <input class="form-control" id="topic" name="topic" type="text" value=""
-                                   data-val="true" data-val-required="请输入调度器topic." placeholder="">
+                            <input class="form-control" id="topic" name="topic" type="text" th:value="${timer.topic}"
+                                   readonly
+                                   data-val="true" data-val-required="请输入定时器描述." placeholder="">
                         </div>
                     </div>
+
+
                     <div class="form-group col-md-12 col-xs-12">
                         <label class="control-label col-md-2 col-xs-2" for="message">message:</label>
                         <div class="col-md-4 col-xs-4">
+                            <input class="form-control" id="message" name="message" type="text"
+                                   th:value="${timer.message}" readonly>
 
-                            <select class="form-control valid" aria-invalid="false" name="message" id="message"
-                                    data-val="true" data-val-required="请选择message.">
-                                <option value="">请选择</option>
-                                <option value="yyyy-MM-dd HH:mm:ss">yyyy-MM-dd HH:mm:ss</option>
-                                <option value="yyyy-MM-dd">yyyy-MM-dd</option>
-                            </select>
                         </div>
                         <div class="text-danger clearboth" data-valmsg-for="message"
                              data-valmsg-replace="true"></div>
@@ -115,7 +115,8 @@
                     <div class="form-group col-md-12 col-xs-12">
                         <label class="control-label col-md-2 col-xs-2" for="message">corn:</label>
                         <div class="col-md-4 col-xs-4">
-                            <input class="form-control" id="corn" name="corn" type="text" value=""
+                            <input class="form-control" id="corn" name="corn" type="text" th:value="${timer.corn}"
+                                   readonly
                                    data-val="true" data-val-required="请输入corn."
                                    placeholder="填正确的cron表达式 例如*/5 * * * * ?">
                         </div>
@@ -128,19 +129,47 @@
                         <label class="control-label col-md-2 col-xs-2">定时器状态:</label>
                         <div class="col-md-2 col-xs-2">
                             <select class="form-control valid" aria-invalid="false" name="status" id="status">
-                                <option value="false">禁用</option>
-                                <option value="true">启用</option>
+                                <option value="false" th:selected="!${timer.status}">禁用</option>
+                                <option value="true" th:selected="${timer.status}">启用</option>
                             </select>
                         </div>
                     </div>
 
-                    <div class="form-group col-md-12 col-xs-12 mt-30 mb-20">
-                        <label class="control-label col-md-2 col-xs-2">&nbsp;</label>
-                        <div class="col-md-4 col-xs-4 text-right">
-                            <button type="button" id="submit" class="btn btn-primary pl-50 pr-50">保存</button>
-                        </div>
-                    </div>
                 </form>
+
+
+                <span>________________________________________________________________________________________________________________________________________________________________</span>
+                </br>
+                <div class="form-group col-md-12 col-xs-12">
+                    <label class="control-label col-md-2 col-xs-2" for="topic">最近应该执行的时间:</label>
+                    <div class="col-md-4 col-xs-4">
+                        <input class="form-control" id="lastExpectTime " name="lastExpectTime" type="text"
+                               th:value="${executor.lastExpectTime}" readonly>
+                    </div>
+                </div>
+                <span>执行者状况:</span>
+                <table class="table table-striped table-bordered table-hover dataTable">
+                    <thead>
+                    <tr>
+                        <th>
+                            groupId
+                        </th>
+                        <th>
+                            上次执行时间
+                        </th>
+
+                    </tr>
+                    </thead>
+                    <tbody th:each="topicInfo:${executor.topicInfos}">
+
+                    <tr>
+                        <td th:text="${topicInfo.consumer}">
+                        </td>
+                        <td th:text="${topicInfo.lastTime}">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
 
 
             </div>
@@ -158,7 +187,7 @@
         $('#submit').on('click', function () {
             var $btn = $(this);
             $("#timerForm").removeData("validator").removeData("unobtrusiveValidation");
-            $.validator.unobtrusive.parse($("#timerForm"));
+            // $.validator.unobtrusive.parse($("#timerForm"));
             if ($("#timerForm").valid()) {
                 $btn.button('loading');
                 $.ajax({

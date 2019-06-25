@@ -112,13 +112,7 @@
                        </span>
                                     <span>
                                      <a class='data-detail btn btn-info' data-title='新增定时器'
-                                        href="javascript:addTabs({id:'1',text: '新增',close: true,url: '/timer/addTimer'});">新增</a>
-                            </span>
-                                    <span>
-                                     <a class='data-detail btn btn-info' data-title='topic列表'
-                                        href="javascript:addTabs({id:'2',text: 'topic列表',close: true,url: '/topic/list'});"
-                                     >topic列表</a>
-
+                                        onclick="window.parent.addTabs({id:'11',title: '新增',close: true,url: '/timer/addTimer'})">新增</a>
                             </span>
                                 </div>
                             </div>
@@ -279,7 +273,7 @@
                     align: "center",
                     formatter: function (value,
                                          row, index) {
-                        if (value == true) {
+                        if (value) {
                             return "启用"
                         } else {
                             return "禁用"
@@ -293,22 +287,14 @@
                     formatter: function (value, row, index) {
                         var used = "<button class='btn btn-sm btn-primary' onclick='startTimer(" + "\"" + value + "\"" + ")'>启用</button> &nbsp";
                         var disabled = "<button class='btn btn-sm btn-primary' onclick='stopTimer(" + "\"" + value + "\"" + ")'>禁用</button> &nbsp"
-                        if (row.status) {
-                            return "<a class='data-detail btn btn-primary btn-mini'  data-title='定时器详情'  href='/timer/" + value + "/detailTimer'>详情</a> &nbsp" +
-                                "<a class='data-detail btn btn-primary btn-mini'  data-title='定时器编辑'   href='/timer/" + value + "/editTimer'>编辑</a> &nbsp" +
-                                disabled +
-                                "<button class='btn btn-sm btn-primary' onclick='executeTimer(" + "\"" + value + "\"" + ")'>执行</button> &nbsp" +
-                                "<button class='btn btn-sm btn-primary' onclick='delTimer(" + "\"" + value + "\"" + ")'>删除</button>"
-                                ;
-                        }
-                        else {
-                            return "<a class='data-detail btn btn-primary btn-mini'  data-title='定时器详情'   href='/timer/" + value + "/detailTimer'>详情</a> &nbsp" +
-                                "<a class='data-detail btn btn-primary btn-mini'  data-title='定时器编辑'    href='/timer/" + value + "/editTimer'>编辑</a> &nbsp" +
-                                used +
-                                "<button class='btn btn-sm btn-primary' onclick='executeTimer(" + "\"" + value + "\"" + ")'>执行</button> &nbsp" +
-                                "<button class='btn btn-sm btn-primary' onclick='delTimer(" + "\"" + value + "\"" + ")'>删除</button>"
-                                ;
-                        }
+                        var showOpera = row.status ? disabled : used;
+
+                        return "<a class='data-detail btn btn-primary btn-mini'  data-title='定时器详情'  onclick=\"window.parent.addTabs({id:'12',title: '定时器详情',close: true,url: '/timer/" + value + "/detailTimer'})\">详情</a> &nbsp" +
+                            "<a class='data-detail btn btn-primary btn-mini'  data-title='定时器编辑'  onclick=\"window.parent.addTabs({id:'13',title: '定时器详情',close: true,url: '/timer/" + value + "/editTimer'})\">编辑</a> &nbsp" +
+                            showOpera +
+                            "<button class='btn btn-sm btn-primary' onclick='executeTimer(" + "\"" + value + "\"" + ")'>执行</button> &nbsp" +
+                            "<button class='btn btn-sm btn-primary' onclick='delTimer(" + "\"" + value + "\"" + ")'>删除</button>"
+                            ;
                     }
 
                 }
@@ -468,7 +454,6 @@
             }
         });
     }
-
 
 </script>
 
